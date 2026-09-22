@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write # create the GitHub Release
+  id-token: write # mint the OIDC token npm trusted publishing exchanges
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          # No `cache:` at all — a release build never restores one.
+          registry-url: 'https://registry.npmjs.org'
+
+      # Trusted publishing is npm >= 11.5.1; Node 24 does not ship one that new.
+      - name: Use an npm that can publish through OIDC
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      # The tag and the version being published have to be the same thing, or the
+      # GitHub Release would describe something npm never received.
+      - name: Check the tag matches the built version
+        run: |
+          built="$(node -p "require('./dist/package.json').version")"
+          tagged="${GITHUB_REF_NAME#v}"
+          if [ "$built" != "$tagged" ]; then
+            echo "tag $GITHUB_REF_NAME does not match package version $built" >&2
+            exit 1
+          fi
+
+      # No NODE_AUTH_TOKEN, deliberately: the registry authenticates this exact
+      # workflow through OIDC, which needs a trusted publisher configured for the
+      # package on npmjs.com. Nothing long-lived is stored in the repo.
+      #
+      # `./dist` is the package: the build assembles the published layout there,
+      # with an executors.json whose paths point at the compiled files.
+      - name: Publish to npm
+        run: npm publish ./dist --access public
+
+      # The release body is the tag's own changelog section, so the notes on
+      # GitHub and the notes in the repo cannot drift apart.
+      - name: Read the release notes out of the changelog
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v version="$version" '
+            $0 ~ "^## \\[" version "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > "$RUNNER_TEMP/release-notes.md"
+          if [ ! -s "$RUNNER_TEMP/release-notes.md" ]; then
+            echo "CHANGELOG.md has no '## [$version]' section" >&2
+            exit 1
+          fi
+
+      # A release cut by hand ahead of the tag keeps its own notes: updating one
+      # that already exists is refused with "Resource not accessible by
+      # integration" even with `contents: write`, and overwriting notes someone
+      # wrote is not what this step is for. Creating is the path that matters.
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME already exists — leaving its notes as they are."
+            exit 0
+          fi
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --latest

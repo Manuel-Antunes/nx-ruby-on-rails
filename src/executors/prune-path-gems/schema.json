@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "outputCapture": "direct-nodejs",
+  "title": "Prune Ruby PATH gems",
+  "description": "Vendors a Ruby project's local PATH gems (in-repo gems referenced via `path:`) into a folder inside the project root so its Docker build can use a folder context instead of the repo root.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "vendorDir": {
+      "type": "string",
+      "description": "Directory, relative to the project root, the path gems are vendored into. Keep in sync with the target's `outputs`.",
+      "default": ".workspace-gems"
+    },
+    "skip": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Directory basenames excluded when copying each path gem.",
+      "default": ["node_modules", "tmp", "log", "coverage", ".git", ".nx"]
+    }
+  },
+  "required": []
+}

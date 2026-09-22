@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "outputCapture": "direct-nodejs",
+  "title": "Prune Ruby Gemfile.lock",
+  "description": "Generates an app-scoped Gemfile.lock from the monorepo's unified root Gemfile.lock — pruned to the app's dependency closure with the path-gem `remote:` re-anchored to the app directory. The Bundler analogue of `@nx/js:prune-lockfile`.",
+  "cli": "nx",
+  "type": "object",
+  "properties": {
+    "rootLockfile": {
+      "type": "string",
+      "description": "Root unified Gemfile.lock, relative to the workspace root.",
+      "default": "Gemfile.lock"
+    },
+    "gemfile": {
+      "type": "string",
+      "description": "App Gemfile to read direct dependencies from, relative to the project root.",
+      "default": "Gemfile"
+    },
+    "outputLockfile": {
+      "type": "string",
+      "description": "Pruned lockfile destination, relative to the project root. Keep in sync with the target's `outputs`.",
+      "default": "Gemfile.lock"
+    }
+  },
+  "required": []
+}

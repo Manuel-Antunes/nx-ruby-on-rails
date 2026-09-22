@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "executors": {
+    "prune-path-gems": {
+      "implementation": "./src/executors/prune-path-gems/executor",
+      "schema": "./src/executors/prune-path-gems/schema.json",
+      "description": "Vendors a Ruby project's local PATH gems into the project for a folder-scoped Docker build context."
+    },
+    "prune-lockfile": {
+      "implementation": "./src/executors/prune-lockfile/executor",
+      "schema": "./src/executors/prune-lockfile/schema.json",
+      "description": "Generates an app-scoped Gemfile.lock from the monorepo's unified root Gemfile.lock, pruned to the app's dependency closure."
+    }
+  }
+}

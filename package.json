@@ -1,0 +1,62 @@
+{
+  "name": "nx-ruby-on-rails",
+  "version": "0.1.0",
+  "description": "Nx plugin for Ruby and Ruby on Rails: Gemfile-based project inference, path-gem project-graph edges, and Bundler analogues of prune-lockfile / copy-workspace-modules for folder-scoped Docker builds.",
+  "author": "Manuel Antunes",
+  "license": "MIT",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "executors": "./executors.json",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"scripts/**/*.mjs\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"scripts/**/*.mjs\"",
+    "typecheck": "tsc --build --force tsconfig.json",
+    "release": "pnpm run build && npm publish ./dist --access public"
+  },
+  "peerDependencies": {
+    "@nx/devkit": ">=20.0.0 <23.0.0",
+    "nx": ">=20.0.0 <23.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@nx/devkit": "22.5.1",
+    "@types/node": "20.19.9",
+    "@vitest/coverage-v8": "4.0.9",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^10.0.0",
+    "nx": "22.5.1",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "8.44.0",
+    "vitest": "4.0.18"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manuel-Antunes/nx-ruby-on-rails.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Manuel-Antunes/nx-ruby-on-rails/issues"
+  },
+  "homepage": "https://github.com/Manuel-Antunes/nx-ruby-on-rails#readme",
+  "keywords": [
+    "nx",
+    "nx-plugin",
+    "ruby",
+    "rails",
+    "ruby-on-rails",
+    "bundler",
+    "gemfile",
+    "monorepo",
+    "docker"
+  ]
+}

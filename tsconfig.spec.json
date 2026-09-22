@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.lib.json",
+  "compilerOptions": {
+    // Vitest resolves through `exports`, and the emit here is throwaway
+    // (`out-tsc/`), so the specs are checked the way the runner loads them.
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "rootDir": ".",
+    "outDir": "out-tsc/vitest",
+    "tsBuildInfoFile": "out-tsc/vitest/tsconfig.spec.tsbuildinfo",
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src/**/*.spec.ts", "src/**/__fixtures__/**/*.ts", "vitest.config.ts"],
+  "references": [{ "path": "./tsconfig.lib.json" }]
+}

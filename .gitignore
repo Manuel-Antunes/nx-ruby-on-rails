@@ -1,0 +1,15 @@
+node_modules
+dist
+out-tsc
+coverage
+*.tsbuildinfo
+
+.DS_Store
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

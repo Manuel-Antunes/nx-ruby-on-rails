@@ -1,0 +1,5 @@
+dist
+out-tsc
+coverage
+pnpm-lock.yaml
+CHANGELOG.md
