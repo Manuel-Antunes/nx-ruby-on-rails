@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-22
+
+Release tooling only: the plugin itself is unchanged from `0.1.0`.
+
 ### Changed
 
 - **`pnpm publish` builds first.** `publishConfig.directory` points the publish at `dist/` and
@@ -56,5 +60,6 @@ monorepo they came from, and the package now builds and publishes on its own.
   alone. Together with `prune-lockfile` this is what lets a Rails app be built from its own
   folder as the Docker context instead of the repository root.
 
-[Unreleased]: https://github.com/Manuel-Antunes/nx-ruby-on-rails/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Manuel-Antunes/nx-ruby-on-rails/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Manuel-Antunes/nx-ruby-on-rails/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Manuel-Antunes/nx-ruby-on-rails/releases/tag/v0.1.0
