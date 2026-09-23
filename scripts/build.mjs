@@ -79,6 +79,10 @@ write('package.json', {
   main: './index.js',
   types: './index.d.ts',
   executors: './executors.json',
+  // Stated rather than inferred: whoever publishes this manifest — pnpm through
+  // `publishConfig.directory`, or CI through `npm publish ./dist` — publishes it
+  // publicly.
+  publishConfig: { access: 'public' },
   peerDependencies: pkg.peerDependencies,
   engines: pkg.engines,
   repository: pkg.repository,

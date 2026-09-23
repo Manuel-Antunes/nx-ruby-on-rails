@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`pnpm publish` builds first.** `publishConfig.directory` points the publish at `dist/` and
+  a `prepublishOnly` hook assembles it, so a hand-cut release can no longer ship whatever
+  `dist/` was left over from the last build — there is nothing to remember before publishing.
+  `publishConfig.directory` is a pnpm field that plain `npm publish` ignores, so that path is
+  refused outright rather than allowed to publish the repository root and its `executors.json`
+  full of `src/*.ts` paths.
+
 ## [0.1.0] - 2026-09-22
 
 First public release. The plugin was extracted from a private polyglot Nx monorepo where it

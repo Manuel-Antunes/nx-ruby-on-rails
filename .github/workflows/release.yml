@@ -57,7 +57,10 @@ jobs:
       # package on npmjs.com. Nothing long-lived is stored in the repo.
       #
       # `./dist` is the package: the build assembles the published layout there,
-      # with an executors.json whose paths point at the compiled files.
+      # with an executors.json whose paths point at the compiled files. A local
+      # release reaches the same directory through `publishConfig.directory` and
+      # `pnpm publish`; here the directory is named outright, so the credential
+      # exchange stays a plain `npm publish` with nothing in between.
       - name: Publish to npm
         run: npm publish ./dist --access public
 

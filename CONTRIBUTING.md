@@ -118,5 +118,23 @@ the repository), and creates the GitHub Release using that version's changelog s
 body, so the notes on GitHub and the notes in the repository cannot drift apart.
 
 Trusted publishing has to be configured once on npmjs.com, under the package's *Settings →
-Trusted Publisher*: this repository, workflow `release.yml`. Until it is, publish with
-`pnpm run release` locally.
+Trusted Publisher*: this repository, workflow `release.yml`.
+
+### Publishing by hand
+
+```bash
+pnpm publish          # or: pnpm run release
+```
+
+There is no `pnpm build` to remember first. `publishConfig.directory` points the publish at
+`dist/`, and `prepublishOnly` rebuilds it — so what goes to the registry is always compiled
+from the working tree, never whatever `dist/` happened to be left over from the last `pnpm
+build`. pnpm also refuses on a dirty tree or off `main`; `--no-git-checks` overrides that when
+you mean it.
+
+`publishConfig.directory` is a pnpm field. Plain `npm publish` ignores it and would ship the
+repository root, whose `executors.json` points at `src/*.ts`, so `scripts/prepublish.mjs`
+refuses that publish instead of letting a broken tarball out. The release workflow names the
+directory explicitly (`npm publish ./dist`) after its own build step, which is why it does not
+go through that script: npm's OIDC publishing is a plain `npm publish`, and routing it through
+pnpm would put a layer between the workflow and the credential exchange.
